@@ -1,0 +1,14 @@
+export { default as BeastNavbar } from './BeastNavbar';
+export { default as BeastHero } from './BeastHero';
+export { default as BeastFeatureSection } from './BeastFeatureSection';
+export { default as BeastStats } from './BeastStats';
+export { default as BeastSolutions } from './BeastSolutions';
+export { default as BeastDigitalSection } from './BeastDigitalSection';
+export { default as BeastWhyUs } from './BeastWhyUs';
+export { default as BeastIndustries } from './BeastIndustries';
+export { default as BeastSocialProof } from './BeastSocialProof';
+export { default as BeastApproach } from './BeastApproach';
+export { default as BeastCaseStudy } from './BeastCaseStudy';
+export { default as BeastBlogs } from './BeastBlogs';
+export { default as BeastCTA } from './BeastCTA';
+export { default as BeastFooter } from './BeastFooter';
