@@ -112,7 +112,7 @@ function BeastBlogs() {
                         return (
                             <div key={post.id} style={{
                                 width: isFeatured ? '505.7px' : '327.14px',
-                                height: '454.06px',
+                                height: '485.06px',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '15px'

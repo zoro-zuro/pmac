@@ -200,7 +200,7 @@ function BeastSocialProof() {
 
                         <div style={{
                             display: 'flex',
-                            gap: '24px',
+                            gap: '45px',
                             width: '100%',
                             justifyContent: 'space-between'
                         }}>

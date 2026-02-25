@@ -4,6 +4,7 @@ import contactIcon from '../assets/contact_icon.png';
 
 function BeastNavbar() {
   const [activeLink, setActiveLink] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const arrowSvg = (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +20,7 @@ function BeastNavbar() {
       left: 0,
       display: 'flex',
       justifyContent: 'center',
-      zIndex: 10,
+      zIndex: 100,
       opacity: 1
     }}>
       <div className="beast-navbar-container" style={{
@@ -31,7 +32,8 @@ function BeastNavbar() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 24px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        margin: '0 20px'
       }}>
         {/* Logo */}
         <div style={{
@@ -41,11 +43,51 @@ function BeastNavbar() {
           alignItems: 'center',
           gap: '8px'
         }}>
-          <img src={logo} alt="PMAC Logo" style={{ width: '90.75px', height: '24px', paddingRight: '1.88px', paddingLeft: '1.88px' }} />
+          <img src={logo} alt="PMAC Logo" style={{ width: '90.75px', height: '24px' }} />
         </div>
 
+        {/* Hamburger Menu Toggle (Mobile Only via CSS) */}
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          style={{
+            display: 'none', // Hidden on desktop
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '5px',
+            width: '40px',
+            height: '40px'
+          }}
+        >
+          <div style={{
+            width: '25px',
+            height: '2px',
+            backgroundColor: '#222',
+            margin: '4px 0',
+            transition: '0.3s',
+            transform: isMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'
+          }}></div>
+          <div style={{
+            width: '25px',
+            height: '2px',
+            backgroundColor: '#222',
+            margin: '4px 0',
+            transition: '0.3s',
+            opacity: isMenuOpen ? 0 : 1
+          }}></div>
+          <div style={{
+            width: '25px',
+            height: '2px',
+            backgroundColor: '#222',
+            margin: '4px 0',
+            transition: '0.3s',
+            transform: isMenuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none'
+          }}></div>
+        </button>
+
         {/* Elements Container (Nav Items + CTC) */}
-        <div className="nav-elements" style={{
+        <div className={`nav-elements ${isMenuOpen ? 'mobile-open' : ''}`} style={{
           display: 'flex',
           alignItems: 'center',
           gap: '36px'
@@ -56,80 +98,66 @@ function BeastNavbar() {
             display: 'flex',
             alignItems: 'center'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="nav-links-inner" style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
               <span
-                onClick={() => setActiveLink('home')}
+                onClick={() => { setActiveLink('home'); setIsMenuOpen(false); }}
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 400,
                   fontSize: '16px',
-                  lineHeight: '20.8px',
                   color: activeLink === 'home' ? 'rgba(149, 80, 201, 1)' : 'rgba(34, 34, 34, 1)',
-                  cursor: 'pointer',
-                  verticalAlign: 'middle'
+                  cursor: 'pointer'
                 }}
               >Home</span>
 
-              {/* Facilities */}
-              <div style={{
-                width: '122px',
-                height: '36.8px',
-                marginLeft: '8px',
-                marginRight: '8px',
-                padding: '7.9px 18px',
-                display: 'flex',
-                alignItems: 'center',
-                boxSizing: 'border-box',
-                cursor: 'pointer'
-              }}>
-                <div style={{
-                  width: '86px',
-                  height: '21px',
+              {/* Facilities - Simplified for mobile centering */}
+              <div
+                className="nav-item-facility"
+                onClick={() => { setActiveLink('facilities'); setIsMenuOpen(false); }}
+                style={{
+                  marginLeft: '8px',
+                  marginRight: '8px',
                   display: 'flex',
                   alignItems: 'center',
-                  paddingRight: '20px',
-                  boxSizing: 'border-box',
-                  position: 'relative'
+                  gap: '4px',
+                  cursor: 'pointer'
                 }}>
-                  <span style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    lineHeight: '20.8px',
-                    color: activeLink === 'facilities' ? 'rgba(149, 80, 201, 1)' : 'rgba(34, 34, 34, 1)',
-                    verticalAlign: 'middle',
-                    whiteSpace: 'nowrap'
-                  }}>Facilities</span>
-                  <div style={{ position: 'absolute', right: 0 }}>{arrowSvg}</div>
-                </div>
+                <span style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  color: activeLink === 'facilities' ? 'rgba(149, 80, 201, 1)' : 'rgba(34, 34, 34, 1)',
+                  whiteSpace: 'nowrap'
+                }}>Facilities</span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>{arrowSvg}</div>
               </div>
 
               {/* About */}
               <span
-                onClick={() => setActiveLink('about')}
+                onClick={() => { setActiveLink('about'); setIsMenuOpen(false); }}
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 400,
                   fontSize: '16px',
-                  lineHeight: '20.8px',
                   color: activeLink === 'about' ? 'rgba(149, 80, 201, 1)' : 'rgba(34, 34, 34, 1)',
-                  cursor: 'pointer',
-                  verticalAlign: 'middle'
+                  cursor: 'pointer'
                 }}
               >About</span>
 
               {/* Case Studies */}
               <span
-                onClick={() => setActiveLink('case-studies')}
+                onClick={() => { setActiveLink('case-studies'); setIsMenuOpen(false); }}
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 400,
                   fontSize: '16px',
-                  lineHeight: '20.8px',
                   color: activeLink === 'case-studies' ? 'rgba(149, 80, 201, 1)' : 'rgba(34, 34, 34, 1)',
                   cursor: 'pointer',
                   marginLeft: '35px',
-                  verticalAlign: 'middle',
                   whiteSpace: 'nowrap'
                 }}
               >Case Studies</span>
@@ -137,14 +165,16 @@ function BeastNavbar() {
           </nav>
 
           {/* CTC */}
-          <div style={{
-            width: '156px',
-            height: '35px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
+          <div
+            onClick={() => setIsMenuOpen(false)}
+            style={{
+              width: '156px',
+              height: '35px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              cursor: 'pointer'
+            }}>
             <span style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 700,
