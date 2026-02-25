@@ -126,11 +126,9 @@ img {
     color: var(--white);
 }
 
-.btn-primary:hover,
-.beast-btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
+.btn-primary:active,
+.beast-btn-primary:active {
+    opacity: 0.8;
 }
 
 .btn-outline,
@@ -140,10 +138,7 @@ img {
     color: var(--white);
 }
 
-.btn-outline:hover,
-.beast-btn-outline:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
+/* removed hover */
 
 .btn-dark,
 .beast-btn-dark {
@@ -204,10 +199,7 @@ img {
     color: var(--text);
 }
 
-.nav-links a:hover,
-.beast-nav-links a:hover {
-    color: var(--primary);
-}
+/* removed hover */
 
 /* Hero */
 .hero,
@@ -420,11 +412,7 @@ section,
     transition: var(--transition);
 }
 
-.beast-solution-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
-}
+/* removed hover */
 
 .beast-solution-icon {
     width: 100%;
@@ -544,10 +532,7 @@ section,
     width: auto;
 }
 
-.beast-partners-section img:hover {
-    opacity: 1;
-    filter: grayscale(0);
-}
+/* removed hover */
 
 /* CTA */
 /* CTA Section styles move to inline for high-precision design */
@@ -593,9 +578,7 @@ section,
     font-size: 0.9375rem;
 }
 
-.beast-footer-col ul li a:hover {
-    color: var(--white);
-}
+/* removed hover */
 
 .beast-footer-col p {
     color: rgba(255, 255, 255, 0.7);

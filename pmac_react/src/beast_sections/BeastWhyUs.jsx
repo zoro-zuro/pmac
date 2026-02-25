@@ -40,7 +40,7 @@ function BeastWhyUs() {
                 style={{
                     position: 'absolute',
                     top: -440,
-                    left: -80,
+                    left: -100,
                     width: '275px',
                     height: '1180px',
                     objectFit: 'contain',
@@ -53,7 +53,7 @@ function BeastWhyUs() {
                 style={{
                     position: 'absolute',
                     bottom: -330,
-                    right: -80,
+                    right: -100,
                     width: '275px',
                     height: '1180px',
                     objectFit: 'contain',
@@ -127,8 +127,6 @@ function BeastWhyUs() {
                                 justifyContent: 'center',
                                 transition: 'transform 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                         >
                             <span className='whitespace-nowrap'>Request a Quote</span>
                             <img src={contactIcon} alt="icon" style={{ width: '16px', height: '16px', filter: 'brightness(0) invert(1)' }} />

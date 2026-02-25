@@ -169,8 +169,6 @@ function BeastCTA() {
               cursor: 'pointer',
               transition: 'opacity 0.2s ease'
             }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
             >
               Submit
             </button>
