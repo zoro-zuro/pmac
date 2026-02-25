@@ -164,8 +164,9 @@ function BeastNavbar() {
             }}>
               <img src={contactIcon} alt="contact" style={{
                 width: '14px',
-                height: '20px',
-                filter: 'brightness(0) invert(1)'
+                height: '18px',
+                filter: 'brightness(0) invert(1)',
+                marginLeft: "4px"
               }} />
             </div>
           </div>
