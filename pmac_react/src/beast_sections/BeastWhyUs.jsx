@@ -125,7 +125,8 @@ function BeastWhyUs() {
                                 width: '202px',
                                 height: '60px',
                                 justifyContent: 'center',
-                                transition: 'transform 0.2s ease'
+                                transition: 'transform 0.2s ease',
+                                lineHeight: 1,
                             }}
                         >
                             <span className='whitespace-nowrap'>Request a Quote</span>

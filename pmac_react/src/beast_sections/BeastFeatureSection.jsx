@@ -15,6 +15,7 @@ function BeastFeatureSection() {
     }}>
       {/* Background Decorations */}
       <img
+        className='beast-feature-decoration'
         src={progressDecoL}
         alt="decoration"
         style={{
@@ -27,6 +28,7 @@ function BeastFeatureSection() {
         }}
       />
       <img
+        className='beast-feature-decoration'
         src={progressDecoR}
         alt="decoration"
         style={{
@@ -111,7 +113,7 @@ function BeastFeatureSection() {
             gap: '24px'
           }}>
             {/* Feature 1 */}
-            <div style={{
+            <div className="beast-feature-card" style={{
               flex: 1,
               display: 'flex',
               flexDirection: 'column',

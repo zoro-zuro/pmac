@@ -62,21 +62,37 @@ function BeastSocialProof() {
                             alignItems: 'center',
                             width: '820px'
                         }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <span style={{
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 500,
-                                    fontSize: '20px',
-                                    lineHeight: '24px',
-                                    color: 'rgba(21, 18, 22, 1)'
-                                }}>M. Sundari</span>
-                                <span style={{
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    fontSize: '16px',
-                                    lineHeight: '20.8px',
-                                    color: 'rgba(112, 108, 106, 1)'
-                                }}>Production head</span>
+                            <div className='about-testimony-person-details' style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <img src={productionHead} alt="Production Head" style={{
+                                    display: 'none',
+                                    width: '60px',
+                                    height: '60px',
+                                    borderRadius: '4px',
+                                    objectFit: 'cover',
+                                    marginBottom: '8px'
+                                }} />
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '4px'
+                                }}>
+
+                                    <span className='about-testimony-person-details-name' style={{
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 500,
+                                        fontSize: '20px',
+                                        lineHeight: '24px',
+                                        color: 'rgba(21, 18, 22, 1)'
+                                    }}>M. Sundari</span>
+                                    <span className='about-testimony-person-details-position' style={{
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 400,
+                                        fontSize: '16px',
+                                        lineHeight: '20.8px',
+                                        color: 'rgba(112, 108, 106, 1)'
+                                    }}>Production head</span>
+                                </div>
+
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px' }}>
@@ -109,7 +125,7 @@ function BeastSocialProof() {
                     </div>
 
                     {/* Image Right */}
-                    <div style={{
+                    <div className="testimony-lap-image" style={{
                         width: '330px',
                         height: '292.17px',
                         position: 'relative',
@@ -145,7 +161,7 @@ function BeastSocialProof() {
                 </div>
 
                 {/* Separator */}
-                <div style={{
+                <div className="about-separator" style={{
                     width: '100%',
                     height: '1px',
                     borderBottom: '1px dashed rgba(112, 108, 106, 1)',

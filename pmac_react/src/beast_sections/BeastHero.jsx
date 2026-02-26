@@ -85,7 +85,7 @@ function BeastHero() {
             opacity: 1
           }}>
             {/* Request a Quote Button */}
-            <div style={{
+            <div className='hero-header-button' style={{
               width: '207px',
               height: '60px',
               maxWidth: '430.42px',
@@ -161,6 +161,7 @@ function BeastHero() {
             {points.map((point, index) => (
               <div key={index} style={{
                 height: '28px',
+                minWidth: 'fit-content',
                 borderRadius: '20px',
                 backgroundColor: '#FFFFFF',
                 padding: '4px 10px 5px 10px',
@@ -184,21 +185,22 @@ function BeastHero() {
           </div>
 
           {/* Pause Button Overlay */}
-          <div style={{
-            position: 'absolute',
-            bottom: '12px',
-            right: '20px',
-            width: '40px',
-            height: '40px',
-            borderRadius: '20px',
-            backgroundColor: 'rgba(21, 18, 22, 0.2)',
-            backdropFilter: 'blur(2px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            opacity: 1
-          }}>
+          <div className='hero-image-pause-button'
+            style={{
+              position: 'absolute',
+              bottom: '12px',
+              right: '20px',
+              width: '40px',
+              height: '40px',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(21, 18, 22, 0.2)',
+              backdropFilter: 'blur(2px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              opacity: 1
+            }}>
             <img src={pauseIcon} alt="pause" style={{
               width: '12px',
               height: '20.8px',
