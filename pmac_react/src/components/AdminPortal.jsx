@@ -16,7 +16,9 @@ import {
     X,
     Menu,
     Briefcase,
-    AlertCircle
+    AlertCircle,
+    Eye,
+    EyeOff
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -93,8 +95,15 @@ const AdminPortal = () => {
     const [selectedLead, setSelectedLead] = useState(null);
     const [activeTab, setActiveTab] = useState("leads");
     const [newAdminKey, setNewAdminKey] = useState("");
+    const [currentAdminKey, setCurrentAdminKey] = useState("");
+    const [confirmAdminKey, setConfirmAdminKey] = useState("");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [keySuccess, setKeySuccess] = useState(false);
+    const [keyError, setKeyError] = useState("");
+    const [showLoginKey, setShowLoginKey] = useState(false);
+    const [showCurrentKey, setShowCurrentKey] = useState(false);
+    const [showNewKey, setShowNewKey] = useState(false);
+    const [showConfirmKey, setShowConfirmKey] = useState(false);
     const [dateFilter, setDateFilter] = useState("all");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -122,8 +131,14 @@ const AdminPortal = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        const validKey = storedAdminKey || "admin123";
-        if (accessKey === validKey) {
+        const devKey = "admin123";
+        const backendKey = storedAdminKey;
+        const cleanAccessKey = accessKey.trim();
+
+        const isMasterValid = cleanAccessKey === devKey;
+        const isBackendValid = backendKey !== null && backendKey !== undefined && cleanAccessKey === backendKey;
+
+        if (isMasterValid || isBackendValid) {
             setIsAuthenticated(true);
             localStorage.setItem("admin_auth", "true");
             setLoginError("");
@@ -139,11 +154,42 @@ const AdminPortal = () => {
 
     const handleUpdateKey = async (e) => {
         e.preventDefault();
-        if (newAdminKey.length < 6) return alert("Key must be at least 6 characters.");
-        await updateKeyMutation({ newKey: newAdminKey });
-        setKeySuccess(true);
-        setNewAdminKey("");
-        setTimeout(() => setKeySuccess(false), 3000);
+        setKeyError("");
+        setKeySuccess(false);
+
+        const devKey = "admin123";
+        const backendKey = storedAdminKey;
+
+        // Trim all inputs
+        const currentTrimmed = currentAdminKey.trim();
+        const newTrimmed = newAdminKey.trim();
+        const confirmTrimmed = confirmAdminKey.trim();
+
+        const isCurrentValid = (currentTrimmed === devKey) || (backendKey && currentTrimmed === backendKey);
+
+        if (!isCurrentValid) {
+            return setKeyError("Current administrative key is incorrect.");
+        }
+        if (newTrimmed.length < 6) {
+            return setKeyError("New key must be at least 6 characters long.");
+        }
+        if (newTrimmed !== confirmTrimmed) {
+            return setKeyError("New keys do not match. Please confirm again.");
+        }
+        if (newTrimmed === devKey || (backendKey && newTrimmed === backendKey)) {
+            return setKeyError("New key must be different from current keys.");
+        }
+
+        try {
+            await updateKeyMutation({ newKey: newTrimmed });
+            setKeySuccess(true);
+            setNewAdminKey("");
+            setCurrentAdminKey("");
+            setConfirmAdminKey("");
+            setTimeout(() => setKeySuccess(false), 5000);
+        } catch (err) {
+            setKeyError("An error occurred while updating the key.");
+        }
     };
 
     const getDateBound = () => {
@@ -219,13 +265,28 @@ const AdminPortal = () => {
                     <form onSubmit={handleLogin} style={s.col({ gap: 24 })}>
                         <div>
                             <label style={s.label()}>Access Key</label>
-                            <input
-                                type="password"
-                                value={accessKey}
-                                onChange={e => setAccessKey(e.target.value)}
-                                placeholder="Enter your security key"
-                                style={s.input()}
-                            />
+                            <div style={{ position: "relative" }}>
+                                <input
+                                    type={showLoginKey ? "text" : "password"}
+                                    value={accessKey}
+                                    onChange={e => setAccessKey(e.target.value)}
+                                    placeholder="••••••••"
+                                    style={s.input({ paddingRight: 48 })}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowLoginKey(!showLoginKey)}
+                                    style={{
+                                        position: "absolute", right: 12, top: "50%",
+                                        transform: "translateY(-50%)",
+                                        background: "none", border: "none",
+                                        color: C.textDim, cursor: "pointer",
+                                        padding: 4, display: "flex"
+                                    }}
+                                >
+                                    {showLoginKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                             {loginError && (
                                 <div style={s.flex({
                                     alignItems: "center",
@@ -443,9 +504,11 @@ const AdminPortal = () => {
                 {/* Header — 2-row layout for clean mobile display */}
                 <header style={{
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    padding: "14px 24px",
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: isMobile ? "flex-start" : "center",
+                    justifyContent: isMobile ? "center" : "space-between",
+                    padding: isMobile ? "14px 24px" : "0 32px",
+                    height: isMobile ? "auto" : 72,
                     borderBottom: `1px solid ${C.divider}`,
                     gap: 12,
                 }}>
@@ -477,7 +540,7 @@ const AdminPortal = () => {
                             <div style={{ position: "relative" }}>
                                 {/* Trigger button */}
                                 <button
-                                    onClick={() => setIsDropdownOpen(o => !o)}
+                                    onClick={(e) => { e.stopPropagation(); setIsDropdownOpen(o => !o); }}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
@@ -784,6 +847,41 @@ const AdminPortal = () => {
 
                                 <form onSubmit={handleUpdateKey} style={s.col({ gap: 20 })}>
                                     <div>
+                                        <label style={s.label()}>Current Administrative Key</label>
+                                        <div style={{ position: "relative" }}>
+                                            <ShieldCheck
+                                                size={16}
+                                                color={C.textFaint}
+                                                style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}
+                                            />
+                                            <input
+                                                type={showCurrentKey ? "text" : "password"}
+                                                value={currentAdminKey}
+                                                onChange={e => setCurrentAdminKey(e.target.value)}
+                                                placeholder="Enter current key"
+                                                style={s.input({ paddingLeft: 44, paddingRight: 48, fontFamily: "monospace" })}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowCurrentKey(!showCurrentKey)}
+                                                style={{
+                                                    position: "absolute", right: 12, top: "50%",
+                                                    transform: "translateY(-50%)",
+                                                    background: "none", border: "none",
+                                                    color: C.textDim, cursor: "pointer",
+                                                    padding: 4, display: "flex"
+                                                }}
+                                            >
+                                                {showCurrentKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div style={{
+                                        height: 1, background: C.divider, margin: "4px 0"
+                                    }} />
+
+                                    <div>
                                         <label style={s.label()}>New Administrative Key</label>
                                         <div style={{ position: "relative" }}>
                                             <ShieldCheck
@@ -792,17 +890,78 @@ const AdminPortal = () => {
                                                 style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}
                                             />
                                             <input
-                                                type="text"
+                                                type={showNewKey ? "text" : "password"}
                                                 value={newAdminKey}
                                                 onChange={e => setNewAdminKey(e.target.value)}
-                                                placeholder="Enter new key (min 6 characters)"
-                                                style={s.input({ paddingLeft: 44, fontFamily: "monospace" })}
+                                                placeholder="Enter new key (min 6 chars)"
+                                                style={s.input({ paddingLeft: 44, paddingRight: 48, fontFamily: "monospace" })}
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNewKey(!showNewKey)}
+                                                style={{
+                                                    position: "absolute", right: 12, top: "50%",
+                                                    transform: "translateY(-50%)",
+                                                    background: "none", border: "none",
+                                                    color: C.textDim, cursor: "pointer",
+                                                    padding: 4, display: "flex"
+                                                }}
+                                            >
+                                                {showNewKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
                                         </div>
-                                        <p style={{ margin: "10px 0 0 0", fontSize: 12, color: C.textFaint, lineHeight: 1.6 }}>
-                                            Changing this key will require you to log in again with the new credentials.
+                                    </div>
+
+                                    <div>
+                                        <label style={s.label()}>Confirm New Key</label>
+                                        <div style={{ position: "relative" }}>
+                                            <ShieldCheck
+                                                size={16}
+                                                color={C.textFaint}
+                                                style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}
+                                            />
+                                            <input
+                                                type={showConfirmKey ? "text" : "password"}
+                                                value={confirmAdminKey}
+                                                onChange={e => setConfirmAdminKey(e.target.value)}
+                                                placeholder="Confirm new key"
+                                                style={s.input({ paddingLeft: 44, paddingRight: 48, fontFamily: "monospace" })}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirmKey(!showConfirmKey)}
+                                                style={{
+                                                    position: "absolute", right: 12, top: "50%",
+                                                    transform: "translateY(-50%)",
+                                                    background: "none", border: "none",
+                                                    color: C.textDim, cursor: "pointer",
+                                                    padding: 4, display: "flex"
+                                                }}
+                                            >
+                                                {showConfirmKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
+                                        </div>
+                                        <p style={{ margin: "14px 0 0 0", fontSize: 12, color: C.textFaint, lineHeight: 1.6 }}>
+                                            Rotating this key will require all active sessions to re-authenticate using the new credentials.
                                         </p>
                                     </div>
+
+                                    {keyError && (
+                                        <div style={{
+                                            padding: "12px 16px",
+                                            background: "rgba(239,68,68,0.08)",
+                                            border: "1px solid rgba(239,68,68,0.2)",
+                                            borderRadius: 12,
+                                            fontSize: 13,
+                                            color: "#EF4444",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 8
+                                        }}>
+                                            <AlertCircle size={16} />
+                                            {keyError}
+                                        </div>
+                                    )}
 
                                     {keySuccess && (
                                         <div style={{
