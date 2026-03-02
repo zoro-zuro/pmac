@@ -63,10 +63,11 @@ function BeastNavbar() {
           <div style={{
             width: '25px',
             height: '2px',
-            backgroundColor: '#222',
+            backgroundColor: isMenuOpen ? '#000' : '#222',
+            scale: isMenuOpen ? 2 : 1,
             margin: '4px 0',
             transition: '0.3s',
-            transform: isMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'
+            transform: isMenuOpen ? 'rotate(-310deg) translate(2px, 4px)' : 'none'
           }}></div>
           <div style={{
             width: '25px',
@@ -79,10 +80,11 @@ function BeastNavbar() {
           <div style={{
             width: '25px',
             height: '2px',
-            backgroundColor: '#222',
+            backgroundColor: isMenuOpen ? '#000' : '#222',
+            scale: isMenuOpen ? 2 : 1,
             margin: '4px 0',
             transition: '0.3s',
-            transform: isMenuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none'
+            transform: isMenuOpen ? 'rotate(-45deg) translate(4px, -5px)' : 'none'
           }}></div>
         </button>
 
@@ -119,8 +121,8 @@ function BeastNavbar() {
                 className="nav-item-facility"
                 onClick={() => { setActiveLink('facilities'); setIsMenuOpen(false); }}
                 style={{
-                  marginLeft: '8px',
-                  marginRight: '8px',
+                  marginLeft: '24px',
+                  marginRight: '24px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',

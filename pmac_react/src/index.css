@@ -599,68 +599,42 @@ section,
 @media (max-width: 1240px) {
 
     /* Navbar Hamburger & Overlay */
-    .mobile-menu-toggle {
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 1001 !important;
-        position: relative;
-    }
-
-    .beast-navbar-container {
-        margin: 0 20px !important;
-        width: calc(100% - 40px) !important;
-        position: relative;
-    }
-
+    /* Restore Laptop View Navbar */
     .nav-elements {
-        position: fixed !important;
-        top: 0 !important;
-        right: -100% !important;
-        width: 100% !important;
-        height: 100vh !important;
-        background: rgba(255, 255, 255, 0.9) !important;
-        backdrop-filter: blur(15px) !important;
         display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        z-index: 1000 !important;
-        gap: 30px !important;
-        padding: 40px !important;
-        box-sizing: border-box !important;
-    }
-
-    .nav-elements.mobile-open {
-        right: 0 !important;
-        display: flex !important;
-        /* Ensure visibility when open */
-    }
-
-    .nav-elements nav {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: auto !important;
         height: auto !important;
-        /* width: 100% !important; */
+        background: none !important;
+        backdrop-filter: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        flex-direction: row !important;
+        gap: 36px !important;
+        padding: 0 !important;
+        z-index: auto !important;
+    }
+
+    .mobile-menu-toggle {
+        display: none !important;
     }
 
     .nav-links-inner {
-        flex-direction: column !important;
-        gap: 20px !important;
-        align-items: center !important;
+        flex-direction: row !important;
+        gap: 35px !important;
     }
 
     .nav-links-inner span,
     .nav-links-inner div {
-        font-size: 20px !important;
-        margin: 0 !important;
-        color: #151216 !important;
-        text-align: center !important;
+        font-size: 16px !important;
     }
 
     .nav-elements>div[style*="width: 156px"] {
-        width: auto !important;
-        margin-top: 20px !important;
+        width: 156px !important;
+        margin-top: 0 !important;
     }
 
     /* Global Container Resets */
@@ -1388,8 +1362,74 @@ section,
 
 @media (max-width: 768px) {
     .beast-navbar-container {
-        height: 50px !important;
+        height: 54px !important;
         margin: 0px 20px !important;
+        position: relative !important;
+    }
+
+    .mobile-menu-toggle {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        height: fit-content !important;
+        align-items: center !important;
+        /* gap: 5px !important; */
+        z-index: 2100 !important;
+    }
+
+    .nav-elements {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(10px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 40px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: all 0.3s ease !important;
+        z-index: 2000 !important;
+    }
+
+    .nav-elements.mobile-open {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    /* The white popup container */
+    .nav-elements::before {
+        content: "" !important;
+        position: absolute !important;
+        width: 85% !important;
+        max-width: 320px !important;
+        height: auto !important;
+        min-height: 400px !important;
+        background: #ffffff !important;
+        border-radius: 25px !important;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2) !important;
+        z-index: -1 !important;
+    }
+
+    .nav-elements nav {
+        height: auto !important;
+    }
+
+    .nav-links-inner {
+        flex-direction: column !important;
+        gap: 25px !important;
+    }
+
+    .nav-links-inner span,
+    .nav-links-inner div {
+        margin: 0 !important;
+        font-size: 20px !important;
+        color: #151216 !important;
     }
 
     * {
