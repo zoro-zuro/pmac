@@ -13,9 +13,7 @@ function BeastCTA() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const submitContact = useMutation(api.contacts.submitContact);
-  const sendEmail = useAction(api.actions.sendLeadEmail);
-  const sendAutoReply = useAction(api.actions.sendAutoReplyEmail);
+  const processCapture = useAction(api.actions.processContactCapture);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,29 +21,14 @@ function BeastCTA() {
 
     setIsSubmitting(true);
     try {
-      // 1. Save to Database
-      await submitContact({
+      // 1. Trigger All-in-one Capture Action (Fast & Parallel)
+      await processCapture({
         fullName: formData.fullName,
-        businessEmail: formData.email,
+        email: formData.email,
         phoneNumber: formData.phone,
         message: formData.details,
         source: "Website CTA"
       });
-
-      // 2. Trigger Email Actions (Async)
-      // Send Lead Alert to Admin (Resend)
-      sendEmail({
-        fullName: formData.fullName,
-        email: formData.email,
-        phoneNumber: formData.phone,
-        message: formData.details
-      }).catch(err => console.error("Admin notification failed:", err));
-
-      // Send Auto-Reply to Customer (EmailJS)
-      sendAutoReply({
-        fullName: formData.fullName,
-        email: formData.email
-      }).catch(err => console.error("Auto-reply failed:", err));
 
       setIsSubmitted(true);
       setFormData({ fullName: '', email: '', phone: '', details: '' });
