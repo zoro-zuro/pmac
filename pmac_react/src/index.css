@@ -1436,7 +1436,6 @@ section,
         /* max-width: 100% !important; */
         /* Removed as per user request */
         box-sizing: border-box !important;
-        max-height: 100% !important;
     }
 
     .hero-header {

@@ -18,7 +18,8 @@ import {
     Briefcase,
     AlertCircle,
     Eye,
-    EyeOff
+    EyeOff,
+    Download
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -190,6 +191,41 @@ const AdminPortal = () => {
         } catch (err) {
             setKeyError("An error occurred while updating the key.");
         }
+    };
+
+    const handleDownloadLeads = () => {
+        if (contacts.length === 0) return alert("No leads to download.");
+
+        // Define headers
+        const headers = ["Full Name", "Email", "Company Name", "Source", "Phone Number", "Requirement/Message", "Date"];
+
+        // Format data
+        const rows = contacts.map(c => [
+            `"${c.fullName || ''}"`,
+            `"${c.businessEmail || ''}"`,
+            `"${c.companyName || '—'}"`,
+            `"${c.source || ''}"`,
+            `"${c.phoneNumber || ''}"`,
+            `"${(c.message || c.requirement || '—').replace(/"/g, '""')}"`,
+            `"${new Date(c.createdAt).toLocaleString()}"`
+        ]);
+
+        // Combine into CSV string
+        const csvContent = [
+            headers.join(","),
+            ...rows.map(r => r.join(","))
+        ].join("\n");
+
+        // Create blob and download link
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `PMAC_Leads_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const getDateBound = () => {
@@ -544,22 +580,25 @@ const AdminPortal = () => {
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
-                                        gap: 8,
-                                        padding: "7px 14px",
-                                        borderRadius: 20,
+                                        justifyContent: "space-between",
+                                        gap: 12,
+                                        padding: "8px 16px",
+                                        borderRadius: 22,
                                         border: `1px solid ${C.primary}`,
                                         background: C.primaryLight,
                                         color: C.primary,
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: 700,
                                         fontFamily: "Inter, sans-serif",
                                         cursor: "pointer",
                                         whiteSpace: "nowrap",
+                                        minWidth: 120,
+                                        maxHeight: 'fit-content'
                                     }}
                                 >
-                                    {{ all: "All Time", today: "Today", week: "This Week", month: "This Month" }[dateFilter]}
-                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ transform: isDropdownOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>
-                                        <path d="M1 1l4 4 4-4" stroke="#9550C9" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                                    <span>{{ all: "All Time", today: "Today", week: "This Week", month: "This Month" }[dateFilter]}</span>
+                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ transform: isDropdownOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", marginLeft: 4 }}>
+                                        <path d="M1 1l4 4 4-4" stroke="#9550C9" strokeWidth="2" strokeLinecap="round" fill="none" />
                                     </svg>
                                 </button>
 
@@ -587,15 +626,17 @@ const AdminPortal = () => {
                                                 key={opt.key}
                                                 onClick={() => { setDateFilter(opt.key); setIsDropdownOpen(false); }}
                                                 style={{
-                                                    display: "block",
+                                                    display: "flex",
+                                                    alignItems: "center",
                                                     width: "100%",
+                                                    height: 44,
                                                     textAlign: "left",
-                                                    padding: "10px 16px",
+                                                    padding: "0 16px",
                                                     border: "none",
                                                     borderBottom: i < arr.length - 1 ? `1px solid ${C.divider}` : "none",
                                                     background: dateFilter === opt.key ? C.primaryLight : "transparent",
                                                     color: dateFilter === opt.key ? C.primary : C.textDim,
-                                                    fontSize: 12,
+                                                    fontSize: 13,
                                                     fontWeight: dateFilter === opt.key ? 700 : 500,
                                                     fontFamily: "Inter, sans-serif",
                                                     cursor: "pointer",
@@ -709,22 +750,47 @@ const AdminPortal = () => {
                                     gap: 12,
                                 }}>
                                     <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#ffffff' }}>Incoming Leads</h3>
-                                    <div style={s.flex({
-                                        alignItems: "center", gap: 8,
-                                        background: C.primaryLight,
-                                        color: C.primary,
-                                        padding: "6px 14px",
-                                        borderRadius: 20,
-                                        fontSize: 11, fontWeight: 700,
-                                        textTransform: "uppercase",
-                                        letterSpacing: "0.08em",
-                                    })}>
-                                        <span style={{
-                                            width: 7, height: 7, borderRadius: "50%",
-                                            background: C.primary,
-                                            animation: "pulse 2s infinite",
-                                        }} />
-                                        Live
+                                    <div style={s.flex({ alignItems: "center", gap: 12 })}>
+                                        <button
+                                            onClick={handleDownloadLeads}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 8,
+                                                background: C.inputBg,
+                                                border: `1px solid ${C.inputBorder}`,
+                                                color: C.textDim,
+                                                padding: "7px 14px",
+                                                borderRadius: 12,
+                                                fontSize: 12,
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                transition: "all 0.2s",
+                                            }}
+                                            onMouseOver={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = C.primary; }}
+                                            onMouseOut={(e) => { e.currentTarget.style.color = C.textDim; e.currentTarget.style.borderColor = C.inputBorder; }}
+                                        >
+                                            <Download size={15} />
+                                            {isMobile ? "" : "Export Excel"}
+                                        </button>
+
+                                        <div style={s.flex({
+                                            alignItems: "center", gap: 8,
+                                            background: C.primaryLight,
+                                            color: C.primary,
+                                            padding: "6px 14px",
+                                            borderRadius: 20,
+                                            fontSize: 11, fontWeight: 700,
+                                            textTransform: "uppercase",
+                                            letterSpacing: "0.08em",
+                                        })}>
+                                            <span style={{
+                                                width: 7, height: 7, borderRadius: "50%",
+                                                background: C.primary,
+                                                animation: "pulse 2s infinite",
+                                            }} />
+                                            Live
+                                        </div>
                                     </div>
                                 </div>
 
